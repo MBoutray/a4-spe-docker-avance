@@ -2,7 +2,6 @@ const redis = require('redis')
 const express = require('express')
 
 const client = redis.createClient({
-    legacyMode: true,
     socket: {
         host: 'redis',
         port: 6379,
@@ -11,18 +10,14 @@ const client = redis.createClient({
 const app = express()
 const port = 3000
 
-client.connect()
+app.get('/', async (req, res) => {
+    await client.connect()
 
-app.get('/', (req, res) => {
-    client.incr('visits', (err, visits) => {
-        if (err) {
-            console.error(err)
-            res.status(500).send(`Error: ${err}`)
-            return
-        }
+    const totalViews = await client.incr('views')
 
-        res.send(`You are visitor number ${visits}`)
-    })
+    res.send(`Total views: ${totalViews}`)
+
+    await client.disconnect()
 })
 
 app.listen(port, () => {
