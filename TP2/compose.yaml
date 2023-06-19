@@ -1,19 +1,10 @@
 services:
-    app:
-        container_name: tp2-app
-        build:
-            context: .
-            dockerfile: Dockerfile
+    express:
+        container_name: tp2-express
+        build: .
         ports:
             - 3000:3000
-        networks:
-            - default
 
     redis:
         container_name: tp2-redis
-        hostname: redis
-        image: redis:7.0
-        ports:
-            - 6379:6379
-        networks:
-            - default
+        image: redis:7-alpine
