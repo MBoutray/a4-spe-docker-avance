@@ -1,13 +1,10 @@
-FROM php:8.2-apache
+FROM alpine
 
-COPY config/vhost.conf /etc/apache2/sites-available/000-default.conf
-COPY config/apache.conf /etc/apache2/conf-available/app.conf
-RUN a2enconf app
+RUN apk update && \
+    apk add apache2 php82 php82-apache2 php82-curl php82-openssl
 
-COPY src/ /var/www/html/
-
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+COPY ./src /var/www/localhost/htdocs
 
 EXPOSE 80
 
-CMD [ "apache2ctl", "-D", "FOREGROUND" ]
+CMD [ "httpd", "-DFOREGROUND" ]
