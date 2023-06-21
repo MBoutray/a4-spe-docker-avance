@@ -1,0 +1,17 @@
+services:
+    nginx:
+        container_name: tp4_nginx
+        hostname: tp4_nginx
+        build:
+            context: ./nginx
+        image: ghcr.io/mboutray/tp4_nginx:latest
+        ports:
+            - 8080:80
+        volumes:
+            - ./php:/var/www/html
+    php:
+        container_name: tp4_php
+        hostname: tp4_php
+        build:
+            context: ./php
+        image: ghcr.io/mboutray/tp4_php:latest
